@@ -456,6 +456,26 @@ class ModuleGenerator extends Generator
     }
 
     /**
+     * Get the module name in camel case.
+     *
+     * @return string
+     */
+    protected function getCamelNameReplacement()
+    {
+        return Str::camel($this->name);
+    }
+
+     /**
+     * Get the module name in kebab case.
+     *
+     * @return string
+     */
+    protected function getKebabNameReplacement()
+    {
+        return Str::kebab($this->name);
+    }
+
+    /**
      * Get replacement for $VENDOR$.
      *
      * @return string
