@@ -80,6 +80,7 @@ class ProviderMakeCommand extends GeneratorCommand
             'CLASS'             => $this->getClass(),
             'LOWER_NAME'        => $module->getLowerName(),
             'SNAKE_NAME'        => $module->getSnakeName(),
+            'KEBAB_NAME'        => $module->getKebabName(),
             'CAMEL_NAME'        => $module->getCamelName(),
             'MODULE'            => $this->getModuleName(),
             'NAME'              => $this->getFileName(),

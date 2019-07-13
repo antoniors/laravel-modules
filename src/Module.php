@@ -111,6 +111,17 @@ abstract class Module extends ServiceProvider
         return Str::camel($this->name);
     }
 
+      /**
+     * Get name in kebab case.
+     *
+     * @return string
+     */
+    public function getKebabName()
+    {
+        return Str::kebab($this->name);
+    }
+
+
     /**
      * Get description.
      *
