@@ -473,8 +473,8 @@ class ModuleGenerator extends Generator
         return Str::camel($this->name);
     }
 
-     /**
-     * Get the module name in camel case.
+    /**
+     * Get the module name in title case.
      *
      * @return string
      */
@@ -483,7 +483,17 @@ class ModuleGenerator extends Generator
         return ucfirst(str_replace('-', ' ', Str::kebab($this->name)));
     }
 
-     /**
+    /**
+     * Get the module name in plural case.
+     *
+     * @return string
+     */
+    protected function getPluralNameReplacement()
+    {
+        return Str::plural(ucfirst(str_replace('-', ' ', Str::kebab($this->name))));
+    }
+
+    /**
      * Get the module name in kebab case.
      *
      * @return string
