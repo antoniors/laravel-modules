@@ -101,6 +101,16 @@ abstract class Module extends ServiceProvider
         return Str::snake($this->name);
     }
 
+     /**
+     * Get name in camel case.
+     *
+     * @return string
+     */
+    public function getCamelName()
+    {
+        return Str::camel($this->name);
+    }
+
     /**
      * Get description.
      *

@@ -79,6 +79,8 @@ class ProviderMakeCommand extends GeneratorCommand
             'NAMESPACE'         => $this->getClassNamespace($module),
             'CLASS'             => $this->getClass(),
             'LOWER_NAME'        => $module->getLowerName(),
+            'SNAKE_NAME'        => $module->getSnakeName(),
+            'CAMEL_NAME'        => $module->getCamelName(),
             'MODULE'            => $this->getModuleName(),
             'NAME'              => $this->getFileName(),
             'STUDLY_NAME'       => $module->getStudlyName(),
