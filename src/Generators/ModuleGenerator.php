@@ -306,7 +306,15 @@ class ModuleGenerator extends Generator
      */
     public function generateFiles()
     {
+        $replacements = $this->module->config('stubs.replacements');
         foreach ($this->getFiles() as $stub => $file) {
+            if (isset($replacements[$stub])) {
+                foreach ($replacements[$stub] as $key) {
+                    if (method_exists($this, $method = 'get' . ucfirst(studly_case(strtolower($key))) . 'Replacement')) {
+                        $file = str_replace('$' . strtoupper($key) . '$', $this->$method(), $file);
+                    }
+                }
+            }
             $path = $this->module->getModulePath($this->getName()) . $file;
 
             if (!$this->filesystem->isDirectory($dir = dirname($path))) {
@@ -473,6 +481,16 @@ class ModuleGenerator extends Generator
     protected function getKebabNameReplacement()
     {
         return Str::kebab($this->name);
+    }
+
+    /**
+     * Get the module name in snake case.
+     *
+     * @return string
+     */
+    protected function getSnakeNameReplacement()
+    {
+        return Str::snake($this->name);
     }
 
     /**
