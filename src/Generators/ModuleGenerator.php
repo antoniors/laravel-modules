@@ -474,6 +474,16 @@ class ModuleGenerator extends Generator
     }
 
      /**
+     * Get the module name in camel case.
+     *
+     * @return string
+     */
+    protected function getTitleNameReplacement()
+    {
+        return ucfirst(str_replace('-', ' ', Str::kebab($this->name)));
+    }
+
+     /**
      * Get the module name in kebab case.
      *
      * @return string
