@@ -115,6 +115,7 @@ class ModelMakeCommand extends GeneratorCommand
             'LOWER_NAME'        => $module->getLowerName(),
             'MODULE'            => $this->getModuleName(),
             'STUDLY_NAME'       => $module->getStudlyName(),
+            'SNAKE_NAME'       => $module->getSnakeName(),
             'MODULE_NAMESPACE'  => $this->laravel['modules']->config('namespace'),
         ]))->render();
     }
