@@ -310,7 +310,7 @@ class ModuleGenerator extends Generator
         foreach ($this->getFiles() as $stub => $file) {
             if (isset($replacements[$stub])) {
                 foreach ($replacements[$stub] as $key) {
-                    if (method_exists($this, $method = 'get' . ucfirst(studly_case(strtolower($key))) . 'Replacement')) {
+                    if (method_exists($this, $method = 'get' . ucfirst(Str::studly(strtolower($key))) . 'Replacement')) {
                         $file = str_replace('$' . strtoupper($key) . '$', $this->$method(), $file);
                     }
                 }
