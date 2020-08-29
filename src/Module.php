@@ -2,12 +2,15 @@
 
 namespace Nwidart\Modules;
 
+use Illuminate\Cache\CacheManager;
 use Illuminate\Container\Container;
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Macroable;
+use Illuminate\Translation\Translator;
 
-abstract class Module extends ServiceProvider
+abstract class Module
 {
     use Macroable;
 
@@ -36,29 +39,33 @@ abstract class Module extends ServiceProvider
      * @var array of cached Json objects, keyed by filename
      */
     protected $moduleJson = [];
+    /**
+     * @var CacheManager
+     */
+    private $cache;
+    /**
+     * @var Filesystem
+     */
+    private $files;
+    /**
+     * @var Translator
+     */
+    private $translator;
 
     /**
      * The constructor.
-     *
      * @param Container $app
      * @param $name
      * @param $path
      */
-    public function __construct(Container $app, $name, $path)
+    public function __construct(Container $app, string $name, $path)
     {
-        parent::__construct($app);
         $this->name = $name;
         $this->path = $path;
-    }
-
-    /**
-     * Get laravel instance.
-     *
-     * @return \Illuminate\Contracts\Foundation\Application|\Laravel\Lumen\Application
-     */
-    public function getLaravel()
-    {
-        return $this->app;
+        $this->cache = $app['cache'];
+        $this->files = $app['files'];
+        $this->translator = $app['translator'];
+        $this->app = $app;
     }
 
     /**
@@ -231,8 +238,8 @@ abstract class Module extends ServiceProvider
             $file = 'module.json';
         }
 
-        return array_get($this->moduleJson, $file, function () use ($file) {
-            return $this->moduleJson[$file] = new Json($this->getPath() . '/' . $file, $this->app['files']);
+        return Arr::get($this->moduleJson, $file, function () use ($file) {
+            return $this->moduleJson[$file] = new Json($this->getPath() . '/' . $file, $this->files);
         });
     }
 
@@ -376,6 +383,7 @@ abstract class Module extends ServiceProvider
         $this->fireEvent('disabling');
 
         $this->setActive(0);
+        $this->flushCache();
 
         $this->fireEvent('disabled');
     }
@@ -388,6 +396,7 @@ abstract class Module extends ServiceProvider
         $this->fireEvent('enabling');
 
         $this->setActive(1);
+        $this->flushCache();
 
         $this->fireEvent('enabled');
     }
@@ -436,5 +445,24 @@ abstract class Module extends ServiceProvider
         return config('modules.register.files', 'register') === 'boot' &&
             // force register method if option == boot && app is AsgardCms
             !class_exists('\Modules\Core\Foundation\AsgardCms');
+    }
+
+    private function flushCache(): void
+    {
+        if (config('modules.cache.enabled')) {
+            $this->cache->store()->flush();
+        }
+    }
+
+    /**
+     * Register a translation file namespace.
+     *
+     * @param  string  $path
+     * @param  string  $namespace
+     * @return void
+     */
+    private function loadTranslationsFrom(string $path, string $namespace): void
+    {
+        $this->translator->addNamespace($namespace, $path);
     }
 }
