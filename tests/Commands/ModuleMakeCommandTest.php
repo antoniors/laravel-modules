@@ -3,6 +3,7 @@
 namespace Nwidart\Modules\Tests\Commands;
 
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Str;
 use Nwidart\Modules\Tests\BaseTestCase;
 use Spatie\Snapshots\MatchesSnapshots;
 
@@ -18,14 +19,14 @@ class ModuleMakeCommandTest extends BaseTestCase
      */
     private $modulePath;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->modulePath = base_path('modules/Blog');
         $this->finder = $this->app['files'];
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->finder->deleteDirectory($this->modulePath);
         if ($this->finder->isDirectory(base_path('modules/ModuleName'))) {
@@ -210,7 +211,7 @@ class ModuleMakeCommandTest extends BaseTestCase
         $notExpected = 'Module [Blog] already exist!
 ';
         $this->assertNotEquals($notExpected, $output);
-        $this->assertTrue(str_contains($output, 'Module [Blog] created successfully.'));
+        $this->assertTrue(Str::contains($output, 'Module [Blog] created successfully.'));
     }
 
     /** @test */
